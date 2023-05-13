@@ -1,4 +1,4 @@
-import jdk.incubator.vector.VectorOperators;
+//import jdk.incubator.vector.VectorOperators;
 
 import java.util.Scanner;
 
