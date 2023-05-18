@@ -8,6 +8,7 @@ public class TestSystem2 {
   private   int correctAnswers ;
     private Scanner scanner;
 
+
     public TestSystem2() {
         this.questions = new String[][]{
                 {"В каком году была основана Java?",
