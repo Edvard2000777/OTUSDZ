@@ -3,49 +3,88 @@
 import java.util.Scanner;
 
 public class TestSystem2 {
-    private String[][] questions ;
-    private  String[] answers; // массив правильных ответов
-  private   int correctAnswers ;
-    private Scanner scanner;
 
 
-    public TestSystem2() {
-        this.questions = new String[][]{
-                {"В каком году была основана Java?",
-                        "1990",
-                        "1991",
-                        "1992"},
-                {"Кто является создателем языка Java?",
-                        "Билл Гейтс",
-                        "Джеймс Гослинг",
-                        "Ларри Эллисон"},
-                {"Какой тип данных используется для хранения логических значений в Java?",
-                        "boolean",
-                        "int",
-                        "float"}
-        };
-        this.answers = new String[]{"2", "2", "1"}; // массив правильных ответов
-        this.scanner = new Scanner(System.in);
-        this.correctAnswers = 0;
+    public static void main(String[] args) {
+        Test test = new Test();
+        test.passTest();
     }
-    public void startTest(){
-        for (int i = 0; i < questions.length; i++) {
-            System.out.println(questions[i][0]);
-            for (int j = 1; j < questions[i].length; j++) {
-                System.out.println(j + ") " + questions[i][j]);
-            }
-            String input = scanner.nextLine();
-            if (input.equals(answers[i])) {
+}
+
+class Test {
+    private Question[] questions;
+    private int correctAnswers;
+
+    public Test(){
+        questions = new Question[]{
+                new Question("В каком году была основана Java?",
+                        new Answer[]{
+                                new Answer("1990"),
+                                new Answer("1991"),
+                                new Answer("1992")
+                        },
+                        2),
+                new Question("Кто является создателем языка Java?",
+                        new Answer[]{
+                                new Answer("Билл Гейтс"),
+                                new Answer("Джеймс Гослинг"),
+                                new Answer("Ларри Эллисон")
+                        },
+                        2),
+                new Question("Какой тип данных используется для хранения логических значений в Java?",
+                        new Answer[]{
+                                new Answer("boolean"),
+                                new Answer("int"),
+                                new Answer("float")
+                        },
+                        1)
+        };
+    }
+    public void passTest(){
+        Scanner scanner = new Scanner(System.in);
+        for (Question question : questions) {
+            question.displayQuestion();
+            int userAnswer = scanner.nextInt();
+
+            if (question.checkAnswer(userAnswer)) {
                 correctAnswers++;
             }
         }
         System.out.println("Тест завершен. Количество правильных ответов: " + correctAnswers + "/" + questions.length);
-
         scanner.close();
     }
 
-    public static void main(String[] args) {
-        TestSystem2 testSystem2 = new TestSystem2();
-        testSystem2.startTest();
+}
+
+class Question {
+    private String questionText;
+    private Answer[] answers;
+    private int correctAnswerIndex;
+
+    public Question(String questionText, Answer[] answers, int correctAnswerIndex){
+        this.questionText = questionText;
+        this.answers = answers;
+        this.correctAnswerIndex = correctAnswerIndex;
     }
+    public void displayQuestion() {
+        System.out.println(questionText);
+
+        for (int i = 0; i < answers.length; i++) {
+            System.out.println((i + 1) + ") " + answers[i].getText());
+        }
+    }
+
+    public boolean checkAnswer(int userAnswer) {
+        return userAnswer == correctAnswerIndex;
+    }
+}
+
+class Answer {
+private  String text;
+public Answer(String text){
+    this.text=text;
+}
+public String getText(){
+    return text;
+}
 }
