@@ -58,8 +58,8 @@ public class BubbleSort {
 
 
     public static void main(String[] args) {
-        int[] arr = {8, 7, 1, 2, 5};
-        int []arr1 = {8, 7, 1, 2, 5};
+        int[] arr = {233, 7, 55, 423, 5};
+        int []arr1 = {8, 7, 1000, 2, 50};
 
         System.out.println("Array arr Before Bubble Sort");
         //  we use java.util.Arrays toString method to print the array
