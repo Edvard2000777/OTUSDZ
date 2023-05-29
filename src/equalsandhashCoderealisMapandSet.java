@@ -1,11 +1,8 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-class Client{
-private String name;
-private  int age;
+class Client {
+    private String name;
+    private int age;
 
     public Client(String name, int age) {
         this.name = name;
@@ -19,10 +16,28 @@ private  int age;
     public int getAge() {
         return age;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Client client = (Client) obj;
+        return age == client.age && Objects.equals(name, client.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
 }
-class Account{
-private int accountId;
-private List<Integer> coins;
+
+class Account {
+    private int accountId;
+    private List<Integer> coins;
 
     public Account(int accountId) {
         this.accountId = accountId;
@@ -32,39 +47,56 @@ private List<Integer> coins;
     public int getAccountId() {
         return accountId;
     }
-    public void addCoins(int amount){
+
+    public void addCoins(int amount) {
         coins.add(amount);
     }
-}
-class Bank{
-    private Map<Client,List<Account>> clientAccounts;
-    public  Bank(){
-        clientAccounts= new HashMap<>();
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Account account = (Account) obj;
+        return accountId == account.accountId;
     }
 
-    public void addClient(Client client){
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountId);
+    }
+}
+
+class Bank {
+    private Map<Client, List<Account>> clientAccounts;
+    private Map<Account, Client> accountClientMapping;
+
+    public Bank() {
+        clientAccounts = new HashMap<>();
+        accountClientMapping = new HashMap<>();
+    }
+
+    public void addClient(Client client) {
         clientAccounts.put(client, new ArrayList<>());
     }
-    public void  addAccount(Client client, Account account){
-        List<Account> accounts= clientAccounts.get(client);
+
+    public void addAccount(Client client, Account account) {
+        List<Account> accounts = clientAccounts.get(client);
         accounts.add(account);
+        accountClientMapping.put(account, client);
     }
-    
-    
+
     public List<Account> getAccounts(Client client) {
         return clientAccounts.getOrDefault(client, new ArrayList<>());
     }
 
     public Client findClient(Account account) {
-        for (Map.Entry<Client, List<Account>> entry : clientAccounts.entrySet()) {
-            if (entry.getValue().contains(account)) {
-                return entry.getKey();
-            }
-        }
-        return null;
+        return accountClientMapping.get(account);
     }
 }
-
 
 public class equalsandhashCoderealisMapandSet {
     public static void main(String[] args) {
