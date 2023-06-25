@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Студенты</h1>
+
+<form id="student-form">
+    <label for="name">Имя студента:</label>
+    <input type="text" id="name" required>
+
+    <label for="dob">Дата рождения:</label>
+    <input type="date" id="dob" required>
+
+    <label for="gender">Пол:</label>
+    <select id="gender">
+        <option value="мужчина">Мужчина</option>
+        <option value="женщина">Женщина</option>
+    </select>
+
+    <button type="submit">Добавить</button>
+</form>
+
+<table id="students-table">
+    <thead>
+    <tr>
+        <th>Имя студента</th>
+        <th>Пол</th>
+        <th>Дата рождения</th>
+        <th>Возраст</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<table id="summary-table">
+    <tbody>
+    <tr>
+        <td>Средний возраст студентов</td>
+        <td id="average-age"></td>
+    </tr>
+    </tbody>
+</table>
+<script>
+    document.getElementById('student-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var nameInput = document.getElementById('name');
+        var dobInput = document.getElementById('dob');
+        var genderInput = document.getElementById('gender');
+        var studentsTable = document.getElementById('students-table');
+        var summaryTable = document.getElementById('summary-table');
+        var averageAgeCell = document.getElementById('average-age');
+
+        var name = nameInput.value;
+        var dob = new Date(dobInput.value);
+        var gender = genderInput.value;
+        var age = calculateAge(dob);
+
+        var newRow = document.createElement('tr');
+        var nameCell = document.createElement('td');
+        var genderCell = document.createElement('td');
+        var dobCell = document.createElement('td');
+        var ageCell = document.createElement('td');
+
+        nameCell.textContent = name;
+        genderCell.textContent = gender;
+        dobCell.textContent = dob.toDateString();
+        ageCell.textContent = age;
+
+        newRow.appendChild(nameCell);
+        newRow.appendChild(genderCell);
+        newRow.appendChild(dobCell);
+        newRow.appendChild(ageCell);
+
+        studentsTable.querySelector('tbody').appendChild(newRow);
+
+        var rows = studentsTable.querySelectorAll('tbody tr');
+        var totalAge = 0;
+
+        for (var i = 0; i < rows.length; i++) {
+            var rowAge = parseInt(rows[i].querySelector('td:last-child').textContent);
+            totalAge += rowAge;
+        }
+
+        var averageAge = totalAge / rows.length;
+        averageAgeCell.textContent = averageAge.toFixed(2);
+
+        nameInput.value = '';
+        dobInput.value = '';
+    });
+
+    function calculateAge(dob) {
+        var now = new Date();
+        var ageDiff = now - dob;
+        var ageDate = new Date(ageDiff);
+        return Math.abs(ageDate.getUTCFullYear() - 1970);
+    }
+</script>
+</body>
+</html>
