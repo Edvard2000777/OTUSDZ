@@ -5,7 +5,23 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
+/*-- Создание базы данных
+CREATE DATABASE test_database;
 
+-- Подключение к базе данных
+\c test_database;
+
+-- Создание таблицы test_results
+CREATE TABLE test_results (
+                              id SERIAL PRIMARY KEY,
+                              correct_answers INT
+);
+
+-- Вставка начальных данных (необязательно)
+INSERT INTO test_results (correct_answers) VALUES
+(3), -- Пример результатов теста
+(2),
+(1);*/
 public class TestSystem2 {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String DB_USERNAME = "postgres";
