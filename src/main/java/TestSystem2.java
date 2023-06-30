@@ -1,19 +1,48 @@
 //import jdk.incubator.vector.VectorOperators;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Scanner;
+/*-- Создание базы данных
+CREATE DATABASE test_database;
 
+-- Подключение к базе данных
+\c test_database;
+
+-- Создание таблицы test_results
+CREATE TABLE test_results (
+                              id SERIAL PRIMARY KEY,
+                              correct_answers INT
+);
+
+-- Вставка начальных данных (необязательно)
+INSERT INTO test_results (correct_answers) VALUES
+(3), -- Пример результатов теста
+(2),
+(1);*/
 public class TestSystem2 {
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String DB_USERNAME = "postgres";
+    private static final String DB_PASSWORD = "postgres";
 
 
     public static void main(String[] args) {
         Test test = new Test();
-        test.passTest();
-    }
-}
 
+        try(Connection connection = DriverManager.getConnection(DB_URL,DB_USERNAME,DB_PASSWORD)){
+            test.passTest(connection);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+}
 class Test {
     private Question[] questions;
     private int correctAnswers;
+
 
     public Test(){
         questions = new Question[]{
@@ -40,7 +69,7 @@ class Test {
                         1)
         };
     }
-    public void passTest(){
+    public void passTest(Connection connection)throws SQLException{
         Scanner scanner = new Scanner(System.in);
         for (Question question : questions) {
             question.displayQuestion();
@@ -49,6 +78,10 @@ class Test {
             if (question.checkAnswer(userAnswer)) {
                 correctAnswers++;
             }
+        }
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO test_results (correct_answers) VALUES (?)")) {
+            statement.setInt(1, correctAnswers);
+            statement.executeUpdate();
         }
         System.out.println("Тест завершен. Количество правильных ответов: " + correctAnswers + "/" + questions.length);
         scanner.close();
