@@ -1,17 +1,30 @@
--- Создание базы данных
-CREATE DATABASE test_database;
-
--- Подключение к базе данных
-\c test_database;
-
--- Создание таблицы test_results
-CREATE TABLE test_results (
-                              id SERIAL PRIMARY KEY,
-                              correct_answers INT
+-- Создание таблицы questions
+CREATE TABLE questions (
+  id SERIAL PRIMARY KEY,
+  question_text TEXT
 );
 
--- Вставка начальных данных (необязательно)
-INSERT INTO test_results (correct_answers) VALUES
-(3), -- Пример результатов теста
-(2),
-(1);*
+-- Создание таблицы answers
+CREATE TABLE answers (
+  id SERIAL PRIMARY KEY,
+  answer_text TEXT,
+  question_id INT REFERENCES questions(id)
+);
+
+-- Вставка начальных данных в таблицу questions
+INSERT INTO questions (question_text) VALUES
+('В каком году была основана Java?'),
+('Кто является создателем языка Java?'),
+('Какой тип данных используется для хранения логических значений в Java?');
+
+-- Вставка начальных данных в таблицу answers
+INSERT INTO answers (answer_text, question_id) VALUES
+('1990', 1),
+('1991', 1),
+('1992', 1),
+('Билл Гейтс', 2),
+('Джеймс Гослинг', 2),
+('Ларри Эллисон', 2),
+('boolean', 3),
+('int', 3),
+('float', 3);
